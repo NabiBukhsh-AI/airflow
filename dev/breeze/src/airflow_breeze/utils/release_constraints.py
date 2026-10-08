@@ -46,7 +46,9 @@ def publish_constraints(*, version: str, ref: str, workflow_branch: str = "main"
     (``3.3.1``) resolves against the published releases and commits onto ``constraints-X-Y``, which
     is what makes the released constraints the baseline everything downstream reads.
     """
-    stage = "candidate" if "rc" in version else "final"
+    from packaging.version import Version
+
+    stage = "candidate" if Version(version).is_prerelease else "final"
     if not confirm_action(
         f"Trigger the release-constraints workflow for the {stage} {version} (resolved from {ref})?"
     ):
